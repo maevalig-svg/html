@@ -568,7 +568,7 @@
         document.getElementById('fileSize').textContent = CONFIG.FILE_SIZE;
         
         // Random social proof
-        const orgNames = ['your organization', 'Acme Corp', 'the team', 'department staff', 'regional office'];
+        const orgNames = ['your organization', 'the team', 'department staff', 'regional office'];
         const counts = [2, 3, 4, 5];
         document.getElementById('downloadCount').textContent = 
             `Downloaded by ${counts[Math.floor(Math.random()*counts.length)]} others in ${orgNames[Math.floor(Math.random()*orgNames.length)]}`;
